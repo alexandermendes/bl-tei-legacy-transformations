@@ -6,6 +6,13 @@
     <xsl:import href="global.xsl" />
     <xsl:output method="xml" encoding="UTF-8" indent="yes" />
     <xsl:strip-space elements="*"/>
+    
+    <!-- Identity transform -->
+    <xsl:template match="@*|node()"> 
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
 
     <!-- Fix msIdentifier -->
     <xsl:template match="tei:msDesc/tei:msIdentifier">
@@ -23,16 +30,8 @@
         </msIdentifier>
     </xsl:template>
 
-    <!-- Add <textLang> to <msContents> if it doesnt exist -->
-    <xsl:template match="tei:msDesc/tei:msContents[not(tei:textLang)]">
-        <msContents>
-            <textLang mainLang="fa">Persian</textLang>
-            <xsl:apply-templates select="@*|node()"/>
-        </msContents>
-    </xsl:template>
-
     <!-- Update @mainLang language codes from 'per' to 'fa' -->
-    <xsl:template match="*//@mainLang" >
+    <xsl:template match="@mainLang" >
         <xsl:attribute name="mainLang">
             <xsl:value-of select="replace(., 'per', 'fa')"/>
         </xsl:attribute>
