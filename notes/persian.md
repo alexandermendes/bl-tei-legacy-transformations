@@ -16,3 +16,4 @@ The following issues need to be addressed before importing into IAMS:
 2. `<msContents>` should have a `<textLang>` child element (could add a generic one but it won't match those 
     in `<msItem>`).
 3. Required `@rend` elements missing, this should be fixed by the new schema.
+4. The content model for element `<msItem>` does not allow character content.
