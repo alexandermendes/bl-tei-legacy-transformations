@@ -3,6 +3,8 @@
                 xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 exclude-result-prefixes="tei #default">
+    <xsl:output method="xml" encoding="UTF-8" indent="yes" />
+    <xsl:strip-space elements="*"/>
 
     <!-- Identity transform -->
     <xsl:template match="@*|node()"> 
@@ -43,16 +45,16 @@
     
     <!-- Add <availability status="free"> if no <availability> exists -->
     <xsl:template match="tei:msDesc/tei:additional/tei:adminInfo[not(tei:availability)]">
-        <adminInfo>
+        <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
             <availability status="free" />
-        </adminInfo>
+        </xsl:copy>
     </xsl:template>
     
     <!-- Remove 'Anonymous' <author> elements removed from <msItem> -->
     <xsl:template match="tei:msDesc/tei:msContents/tei:msItem/tei:author/tei:persName[text() = 'Anonymous']" />
 
-    <!-- Remove empty <pers> elements from <msItem> -->
+    <!-- Remove empty <persName> elements from <msItem> -->
     <xsl:template match="tei:msDesc/tei:msContents/tei:msItem/tei:author/tei:persName[not(*) and not(normalize-space())]" />
 
     <!-- Remove empty <title> elements from <msItem> -->
@@ -67,4 +69,6 @@
     <!-- Remove empty <altIdentifier> elements -->
     <xsl:template match="tei:altIdentifier[not(*) and not(normalize-space())]" />
     
+    <!-- Remove all empty attributes -->
+    <xsl:template match="@*[not(normalize-space())]" />
 </xsl:stylesheet>
