@@ -10,25 +10,17 @@
     <!-- Fix msIdentifier -->
     <xsl:template match="tei:msDesc/tei:msIdentifier">
         <msIdentifier>
-            <country><xsl:text>UK</xsl:text></country>
+            <xsl:apply-templates select="tei:country" />
             <xsl:apply-templates select="tei:settlement" />
-            <institution><xsl:text>British Library</xsl:text></institution>
+            <xsl:apply-templates select="tei:institution" />
             <repository><xsl:text>Oriental Manuscripts</xsl:text></repository>
             <collection><xsl:text>Persian Manuscripts</xsl:text></collection>
-            <xsl:apply-templates select="node()[not(self::tei:settlement) and
-                                                not(self::tei:country) and
+            <xsl:apply-templates select="node()[not(self::tei:country) and 
+                                                not(self::tei:settlement) and
                                                 not(self::tei:institution) and
                                                 not(self::tei:repository) and
                                                 not(self::tei:collection)]"/>
         </msIdentifier>
-    </xsl:template>
-
-    <!-- Add <availability> if it doesnt exist -->
-    <xsl:template match="tei:msDesc/tei:additional/tei:adminInfo[not(tei:availability)]">
-        <adminInfo>
-            <xsl:apply-templates select="@*|node()"/>
-            <availability status="free" />
-        </adminInfo>
     </xsl:template>
 
     <!-- Add <textLang> to <msContents> if it doesnt exist -->
@@ -45,21 +37,6 @@
             <xsl:value-of select="replace(., 'per', 'fa')"/>
         </xsl:attribute>
     </xsl:template>
-
-    <!-- Remove 'Anonymous' <author> elements removed from <msItem> -->
-    <xsl:template match="tei:msDesc/tei:msContents/tei:msItem/tei:author/tei:persName[text() = 'Anonymous']" />
-
-    <!-- Remove empty <pers> elements from <msItem> -->
-    <xsl:template match="tei:msDesc/tei:msContents/tei:msItem/tei:author/tei:persName[not(*) and not(normalize-space())]" />
-
-    <!-- Remove empty <title> elements from <msItem> -->
-    <xsl:template match="tei:msDesc/tei:msContents/tei:msItem/tei:title[not(*) and not(normalize-space())]" />
-    
-    <!-- Remove empty <recordHist> elements -->
-    <xsl:template match="tei:recordHist[not(*) and not(normalize-space())]" />
-
-    <!-- Remove empty <altIdentifier> elements -->
-    <xsl:template match="tei:altIdentifier[not(*) and not(normalize-space())]" />
 
     <!-- Replace 'Hijri-qamari' with Hijriqamari (to match IAMS record) -->
     <xsl:template match="@calendar" >

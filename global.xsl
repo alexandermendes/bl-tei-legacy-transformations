@@ -29,4 +29,42 @@
     <!-- Remove rend attributes -->
     <xsl:template match="@rend"/>
     
+    <!-- Update <country> and <institution> -->
+    <xsl:template match="tei:msDesc/tei:msIdentifier">
+        <msIdentifier>
+            <country><xsl:text>UK</xsl:text></country>
+            <xsl:apply-templates select="tei:settlement" />
+            <institution><xsl:text>British Library</xsl:text></institution>
+            <xsl:apply-templates select="node()[not(self::tei:country) and
+                                                not(self::tei:settlement) and
+                                                not(self::tei:institution)]"/>
+        </msIdentifier>
+    </xsl:template>
+    
+    <!-- Add <availability status="free"> if no <availability> exists -->
+    <xsl:template match="tei:msDesc/tei:additional/tei:adminInfo[not(tei:availability)]">
+        <adminInfo>
+            <xsl:apply-templates select="@*|node()"/>
+            <availability status="free" />
+        </adminInfo>
+    </xsl:template>
+    
+    <!-- Remove 'Anonymous' <author> elements removed from <msItem> -->
+    <xsl:template match="tei:msDesc/tei:msContents/tei:msItem/tei:author/tei:persName[text() = 'Anonymous']" />
+
+    <!-- Remove empty <pers> elements from <msItem> -->
+    <xsl:template match="tei:msDesc/tei:msContents/tei:msItem/tei:author/tei:persName[not(*) and not(normalize-space())]" />
+
+    <!-- Remove empty <title> elements from <msItem> -->
+    <xsl:template match="tei:msDesc/tei:msContents/tei:msItem/tei:title[not(*) and not(normalize-space())]" />
+    
+    <!-- Remove empty <recordHist> elements -->
+    <xsl:template match="tei:recordHist[not(*) and not(normalize-space())]" />
+    
+    <!-- Remove empty <listBibl> elements -->
+    <xsl:template match="tei:listBibl[not(*) and not(normalize-space())]" />
+
+    <!-- Remove empty <altIdentifier> elements -->
+    <xsl:template match="tei:altIdentifier[not(*) and not(normalize-space())]" />
+    
 </xsl:stylesheet>
