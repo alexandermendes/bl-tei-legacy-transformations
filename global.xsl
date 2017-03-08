@@ -60,6 +60,12 @@
     <!-- Remove empty <title> elements from <msItem> -->
     <xsl:template match="tei:msDesc/tei:msContents/tei:msItem/tei:title[not(*) and not(normalize-space())]" />
     
+    <!-- Remove empty <decoDesc> elements -->
+    <xsl:template match="tei:decoDesc[not(*) and not(normalize-space())]" />
+    
+    <!-- Remove empty <sealDesc> elements -->
+    <xsl:template match="tei:sealDesc[not(*) and not(normalize-space())]" />
+    
     <!-- Remove empty <recordHist> elements -->
     <xsl:template match="tei:recordHist[not(*) and not(normalize-space())]" />
     
